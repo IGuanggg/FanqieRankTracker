@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const categoryTitle = document.getElementById('current-category-title');
     const aiContent = document.getElementById('ai-content');
     const trendPanel = document.getElementById('trend-panel');
+    const trendAi = document.getElementById('trend-ai');
+    const aiToggle = document.getElementById('ai-toggle');
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
     const sidebar = document.getElementById('sidebar');
     const dateDisplay = document.getElementById('date-display');
@@ -12,12 +14,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const dateInput = document.getElementById('date-input');
     const datePrevBtn = document.getElementById('date-prev');
     const dateNextBtn = document.getElementById('date-next');
+    const bookSearch = document.getElementById('book-search');
+    const changeFilter = document.getElementById('change-filter');
+    const sortMode = document.getElementById('sort-mode');
+    const resultSummary = document.getElementById('result-summary');
+    const viewBtns = document.querySelectorAll('.view-btn');
 
     let allData = null;
     let typingTimer = null;
     let availableDates = [];   // sorted list of "YYYY-MM-DD"
     let currentDateIndex = -1; // index into availableDates
     let currentCategory = null; // preserve selected category across date switches
+    let searchQuery = '';
+    let changeFilterValue = 'all';
+    let sortModeValue = 'rank';
+    let viewMode = localStorage.getItem('fanqie-view-mode') === 'compact' ? 'compact' : 'cards';
 
     // Cache-busting: 每10分钟一个新key，避免浏览器缓存旧JSON
     const cacheBuster = `v=${Math.floor(Date.now() / 600000)}`;
@@ -76,6 +87,49 @@ document.addEventListener('DOMContentLoaded', () => {
         sidebar.classList.remove('open');
         overlay.classList.remove('show');
     });
+
+    aiToggle.addEventListener('click', () => {
+        const isCollapsed = trendAi.classList.toggle('is-collapsed');
+        aiToggle.textContent = isCollapsed ? '展开' : '收起';
+        aiToggle.setAttribute('aria-expanded', String(!isCollapsed));
+    });
+
+    function renderCurrentBooks() {
+        if (!allData || !currentCategory) return;
+        const cat = allData.categories.find(item => item.name === currentCategory);
+        if (cat) renderBooks(cat);
+    }
+
+    bookSearch.addEventListener('input', () => {
+        searchQuery = bookSearch.value.trim().toLocaleLowerCase('zh-CN');
+        renderCurrentBooks();
+    });
+
+    changeFilter.addEventListener('change', () => {
+        changeFilterValue = changeFilter.value;
+        renderCurrentBooks();
+    });
+
+    sortMode.addEventListener('change', () => {
+        sortModeValue = sortMode.value;
+        renderCurrentBooks();
+    });
+
+    function updateViewMode(nextView) {
+        viewMode = nextView;
+        localStorage.setItem('fanqie-view-mode', viewMode);
+        viewBtns.forEach(btn => {
+            const isActive = btn.dataset.view === viewMode;
+            btn.classList.toggle('active', isActive);
+            btn.setAttribute('aria-pressed', String(isActive));
+        });
+        waterfall.classList.toggle('compact-view', viewMode === 'compact');
+    }
+
+    viewBtns.forEach(btn => {
+        btn.addEventListener('click', () => updateViewMode(btn.dataset.view));
+    });
+    updateViewMode(viewMode);
 
     // ========== Date Navigation ==========
     function updateDateNav() {
@@ -300,7 +354,9 @@ document.addEventListener('DOMContentLoaded', () => {
             selectCategory(savedCategory);
             // Also update sidebar active state
             document.querySelectorAll('#category-list li').forEach(el => {
-                el.classList.toggle('active', el.dataset.category === savedCategory);
+                const isActive = el.dataset.category === savedCategory;
+                el.classList.toggle('active', isActive);
+                el.querySelector('.category-option')?.setAttribute('aria-current', isActive ? 'true' : 'false');
             });
         } else if (data.categories.length > 0) {
             selectCategory(data.categories[0].name);
@@ -313,34 +369,45 @@ document.addEventListener('DOMContentLoaded', () => {
         allData.categories.forEach((cat, i) => {
             const li = document.createElement('li');
             li.dataset.category = cat.name;
+            const button = document.createElement('button');
+            button.className = 'category-option';
+            button.type = 'button';
 
             const nameSpan = document.createElement('span');
             nameSpan.textContent = cat.name;
-            li.appendChild(nameSpan);
+            button.appendChild(nameSpan);
 
             // New entry badge
             const trend = cat.trend || {};
             if (trend.new_count > 0) {
                 const badge = document.createElement('span');
                 badge.className = 'cat-badge new';
-                badge.textContent = `+${trend.new_count}`;
-                li.appendChild(badge);
+                badge.textContent = `新增 ${trend.new_count}`;
+                button.appendChild(badge);
             }
 
             // Mark active: either the saved category or first item
             if ((currentCategory && cat.name === currentCategory) || (!currentCategory && i === 0)) {
                 li.classList.add('active');
+                button.setAttribute('aria-current', 'true');
+            } else {
+                button.setAttribute('aria-current', 'false');
             }
 
-            li.addEventListener('click', () => {
-                document.querySelectorAll('#category-list li').forEach(el => el.classList.remove('active'));
+            button.addEventListener('click', () => {
+                document.querySelectorAll('#category-list li').forEach(el => {
+                    el.classList.remove('active');
+                    el.querySelector('.category-option')?.setAttribute('aria-current', 'false');
+                });
                 li.classList.add('active');
+                button.setAttribute('aria-current', 'true');
                 selectCategory(cat.name);
                 // Close mobile sidebar
                 sidebar.classList.remove('open');
                 overlay.classList.remove('show');
             });
 
+            li.appendChild(button);
             categoryList.appendChild(li);
         });
     }
@@ -437,19 +504,56 @@ document.addEventListener('DOMContentLoaded', () => {
         const books = cat.books || [];
 
         if (books.length === 0) {
+            resultSummary.textContent = '共 0 本';
             waterfall.innerHTML = '<p style="color:var(--text-muted);padding:20px;">该分类暂无书籍。</p>';
             return;
         }
 
         const changeMap = buildPrevRankMap(cat.name);
         const fragment = document.createDocumentFragment();
+        let items = books.map((book, index) => ({
+            book,
+            rank: index + 1,
+            change: changeMap[book.title] || ''
+        }));
 
-        books.forEach((book, index) => {
-            const rank = index + 1;
-            const card = document.createElement('a');
+        if (searchQuery) {
+            items = items.filter(({ book }) =>
+                `${book.title || ''} ${book.author || ''}`.toLocaleLowerCase('zh-CN').includes(searchQuery)
+            );
+        }
+
+        if (changeFilterValue !== 'all') {
+            items = items.filter(({ change }) => {
+                if (changeFilterValue === 'new') return change === 'new';
+                if (changeFilterValue === 'up') return String(change).startsWith('+');
+                if (changeFilterValue === 'down') return String(change).startsWith('-');
+                return true;
+            });
+        }
+
+        if (sortModeValue === 'reads') {
+            items.sort((a, b) => parseReads(b.book.reads) - parseReads(a.book.reads) || a.rank - b.rank);
+        } else if (sortModeValue === 'momentum') {
+            items.sort((a, b) => parseMomentum(b.change) - parseMomentum(a.change) || a.rank - b.rank);
+        }
+
+        resultSummary.textContent = items.length === books.length
+            ? `共 ${books.length} 本`
+            : `显示 ${items.length} / ${books.length} 本`;
+
+        if (items.length === 0) {
+            waterfall.innerHTML = `<div class="empty-state">
+                <p>没有符合条件的作品</p>
+                <p class="empty-hint">可清除搜索词或切换筛选条件</p>
+            </div>`;
+            return;
+        }
+
+        items.forEach(({ book, rank, change }) => {
+            const card = document.createElement('article');
             const bookId = extractBookId(book.url);
-            card.href = bookId ? `book.html?id=${encodeURIComponent(bookId)}` : 'javascript:void(0)';
-            card.rel = 'noopener';
+            const detailUrl = bookId ? `book.html?id=${encodeURIComponent(bookId)}` : (book.url || '#');
             card.className = 'book-card';
 
             // Rank badge class
@@ -460,7 +564,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Change indicator
             let changeHtml = '';
-            const change = changeMap[book.title];
             if (change === 'new') {
                 changeHtml = '<span class="book-change new">NEW</span>';
             } else if (change && change.startsWith('+')) {
@@ -475,18 +578,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 : `<div class="book-cover"><div class="no-cover">暂无封面</div></div>`;
 
             card.innerHTML = `
-                <span class="book-rank ${rankCls}">${rank}</span>
-                ${changeHtml}
-                ${coverHtml}
-                <div class="book-info">
-                    <h3 class="book-title" title="${escapeAttr(book.title)}">${escapeHtml(book.title)}</h3>
-                    <div class="book-meta">
-                        <span class="book-author">${escapeHtml(book.author)}</span>
-                        <span class="book-reads">${escapeHtml(book.reads)}</span>
+                <a class="book-card-link" href="${escapeAttr(detailUrl)}">
+                    <span class="book-rank ${rankCls}">${rank}</span>
+                    ${changeHtml}
+                    ${coverHtml}
+                    <div class="book-info">
+                        <h3 class="book-title" title="${escapeAttr(book.title)}">${escapeHtml(book.title)}</h3>
+                        <div class="book-meta">
+                            <span class="book-author">${escapeHtml(book.author)}</span>
+                            <span class="book-reads">${escapeHtml(book.reads)}</span>
+                        </div>
+                        <p class="book-intro">${escapeHtml(book.intro)}</p>
                     </div>
-                    <p class="book-intro">${escapeHtml(book.intro)}</p>
-                    <button class="book-copy-btn" type="button">复制信息</button>
-                </div>
+                </a>
+                <button class="book-copy-btn" type="button" aria-label="复制《${escapeAttr(book.title)}》的信息">复制信息</button>
             `;
 
             // Bind copy button
@@ -497,6 +602,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         waterfall.appendChild(fragment);
+    }
+
+    function parseReads(value) {
+        const text = String(value || '').replace(/,/g, '').trim();
+        const number = Number.parseFloat(text) || 0;
+        if (text.includes('亿')) return number * 100000000;
+        if (text.includes('万')) return number * 10000;
+        return number;
+    }
+
+    function parseMomentum(change) {
+        if (change === 'new') return 0;
+        const value = Number.parseInt(change, 10);
+        return Number.isFinite(value) ? value : 0;
     }
 
     function escapeAttr(str) {
