@@ -74,7 +74,11 @@ jobs:
         API_MODEL: ${{ secrets.API_MODEL }}
 
     - name: Sync Latest Main Before Commit
-      run: git pull --rebase --autostash origin main
+      run: |
+        # 先把本轮抓取产生的新文件纳入索引，pull 的 autostash 才能带走它们；
+        # 否则 main 若在运行期间被更新（手动同步上游/补跑），会因 untracked 文件冲突整轮失败。
+        git add -A
+        git pull --rebase --autostash origin main
 
     - name: Commit and Push Changes
       uses: stefanzweifel/git-auto-commit-action@v7
