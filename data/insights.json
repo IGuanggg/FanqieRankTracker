@@ -1,0 +1,647 @@
+{
+  "date": "2026-11-14",
+  "prev_date": "2026-11-13",
+  "kpis": {
+    "book_count": 360,
+    "new_count": 16,
+    "dropped_count": 16,
+    "reads_growth_total": 431455.0,
+    "top_growth_book": {
+      "title": "穿成强取豪夺哑巴男主的作精女友",
+      "category": "豪门总裁",
+      "growth_text": "+5.7万",
+      "reads_change": 57000.0
+    },
+    "hottest_category": {
+      "name": "现言脑洞",
+      "reads_growth_total": 79000.0
+    }
+  },
+  "dark_horses": [
+    {
+      "title": "重生把严厉daddy老公撩红瘟",
+      "author": "吉毛长娃娃",
+      "category": "豪门总裁",
+      "rank": 6,
+      "reads": "21万",
+      "reads_value": 210000.0,
+      "reads_change": 27000.0,
+      "reads_change_text": "+2.7万",
+      "url": "https://fanqienovel.com/page/7690944271750269976",
+      "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/p2o4d14225d518699d4527b9cb51068f94d~tplv-resize:225:0.image?lk3s=5b7047ff&x-expires=1795236390&x-signature=zKQa4CTyuEP%2F9HmLcl2MpKrx%2FNk%3D"
+    },
+    {
+      "title": "穿成绝色美人，我靠福袋随遇而安",
+      "author": "影子乘风",
+      "category": "快穿",
+      "rank": 8,
+      "reads": "8.7万",
+      "reads_value": 87000.0,
+      "reads_change": 17000.0,
+      "reads_change_text": "+1.7万",
+      "url": "https://fanqienovel.com/page/7698331141987650622",
+      "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/p2o2411733abd31d56a0b7c153e21881a16~tplv-resize:225:0.image?lk3s=5b7047ff&x-expires=1795236331&x-signature=Br8vpcqS0bIN10xg5CvcDMXWcAo%3D"
+    },
+    {
+      "title": "偷军花照片相亲后被冷硬军官亲懵",
+      "author": "沐云微",
+      "category": "年代",
+      "rank": 7,
+      "reads": "10万",
+      "reads_value": 100000.0,
+      "reads_change": 12000.0,
+      "reads_change_text": "+1.2万",
+      "url": "https://fanqienovel.com/page/7695963704247979070",
+      "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/p2o2164ec0096d357a6ce318a36dcda33d1~tplv-resize:225:0.image?lk3s=5b7047ff&x-expires=1795236273&x-signature=r4Ssh8ZtcdbyAmxF1ed3ttCrNyY%3D"
+    },
+    {
+      "title": "快穿：我女配亿点好孕怎么啦",
+      "author": "浮元元",
+      "category": "快穿",
+      "rank": 12,
+      "reads": "7.5万",
+      "reads_value": 75000.0,
+      "reads_change": 11000.0,
+      "reads_change_text": "+1.1万",
+      "url": "https://fanqienovel.com/page/7419307551952473150",
+      "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/p2o9af5b3e6a3ac60066d28c20604ee9ec4~tplv-resize:225:0.image?lk3s=5b7047ff&x-expires=1795236335&x-signature=wSQhFxULLJsawzOlrXkBp5YjLHo%3D"
+    },
+    {
+      "title": "官宣了！我和顶流挚友是双向暗恋",
+      "author": "陆迢",
+      "category": "星光璀璨",
+      "rank": 6,
+      "reads": "3.9万",
+      "reads_value": 39000.0,
+      "reads_change": 10000.0,
+      "reads_change_text": "+1.0万",
+      "url": "https://fanqienovel.com/page/7694090917262674968",
+      "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/p2o105e84fe203888b65a3acd239e78c623~tplv-resize:225:0.image?lk3s=5b7047ff&x-expires=1795236355&x-signature=efJ5ceVOinjwKZts60Xf%2Fsm%2B%2B0M%3D"
+    },
+    {
+      "title": "快穿：好孕爆棚，打破五代单传",
+      "author": "锦嘉乐",
+      "category": "快穿",
+      "rank": 6,
+      "reads": "10.8万",
+      "reads_value": 108000.0,
+      "reads_change": 9000.0,
+      "reads_change_text": "+9000",
+      "url": "https://fanqienovel.com/page/7668345825327598617",
+      "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/p2o4ebb5cc84c453c33718cabcf57e71f24~tplv-resize:225:0.image?lk3s=5b7047ff&x-expires=1795236331&x-signature=MrQ6n9c%2BPBhtg%2BZeVIPQzKM6yVA%3D"
+    },
+    {
+      "title": "中大奖后，失忆前男友找来了",
+      "author": "姐妹花一一",
+      "category": "职场婚恋",
+      "rank": 6,
+      "reads": "5.8万",
+      "reads_value": 58000.0,
+      "reads_change": 8000.0,
+      "reads_change_text": "+8000",
+      "url": "https://fanqienovel.com/page/7681537681741859902",
+      "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/p2o14409d5d896a6595b66cf0f0c39e15c1~tplv-resize:225:0.image?lk3s=5b7047ff&x-expires=1795236378&x-signature=A0JvNmAVLPNLIpPuomts1MEOG9Y%3D"
+    },
+    {
+      "title": "老实女鬼被偏执阴郁男缠上后",
+      "author": "木拉",
+      "category": "现言脑洞",
+      "rank": 9,
+      "reads": "9.8万",
+      "reads_value": 98000.0,
+      "reads_change": 7000.0,
+      "reads_change_text": "+7000",
+      "url": "https://fanqienovel.com/page/7663919452458601534",
+      "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/p2oea918e538da11484606e34bef2e03275~tplv-resize:225:0.image?lk3s=5b7047ff&x-expires=1795236285&x-signature=SCg1yj8cWVoVzj1UslMsCAcM6%2Bs%3D"
+    }
+  ],
+  "new_entries": [
+    {
+      "title": "他的生理性上瘾",
+      "author": "烟寻",
+      "category": "豪门总裁",
+      "rank": 8,
+      "reads": "17.4万",
+      "reads_value": 174000.0,
+      "reads_change": 0,
+      "reads_change_text": "",
+      "url": "https://fanqienovel.com/page/7693068981791378494",
+      "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/p2o21beaac2f49e6438dbb4fdad6e998122~tplv-resize:225:0.image?lk3s=5b7047ff&x-expires=1795236390&x-signature=i2DlVJyZj5lTjZwsmBLKv2gTvyw%3D"
+    },
+    {
+      "title": "娇软路人甲也要被强取豪夺吗",
+      "author": "香樟小姐",
+      "category": "现言脑洞",
+      "rank": 19,
+      "reads": "7.3万",
+      "reads_value": 73000.0,
+      "reads_change": 0,
+      "reads_change_text": "",
+      "url": "https://fanqienovel.com/page/7685370976271354905",
+      "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/p2o6171d7dd8e9dab91dfae6ce9d3f11fa5~tplv-resize:225:0.image?lk3s=5b7047ff&x-expires=1795236288&x-signature=iPtv0FK1Yw91837KY79%2F5YkWQT0%3D"
+    },
+    {
+      "title": "星际拾荒者，在七零吃上了公家饭",
+      "author": "辰心了",
+      "category": "年代",
+      "rank": 17,
+      "reads": "6.2万",
+      "reads_value": 62000.0,
+      "reads_change": 0,
+      "reads_change_text": "",
+      "url": "https://fanqienovel.com/page/7696899388374780953",
+      "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/p2o1dffba5f772a89e38b836bbc6c8e6c10~tplv-resize:225:0.image?lk3s=5b7047ff&x-expires=1795236277&x-signature=nh1aqkXZuesFQy9JbHh3pOZ5ITM%3D"
+    },
+    {
+      "title": "帐中香：病娇九千岁他又争又抢",
+      "author": "浮日常安",
+      "category": "宫斗宅斗",
+      "rank": 20,
+      "reads": "4.9万",
+      "reads_value": 49000.0,
+      "reads_change": 0,
+      "reads_change_text": "",
+      "url": "https://fanqienovel.com/page/7693231414442986521",
+      "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/p2o7c05a253ba902b9b50c754b8e0234853~tplv-resize:225:0.image?lk3s=5b7047ff&x-expires=1795236300&x-signature=kRxryodG6cx8PShuxzzYOe3MRRA%3D"
+    },
+    {
+      "title": "心跳失轨",
+      "author": "金云雀",
+      "category": "青春甜宠",
+      "rank": 17,
+      "reads": "3.6万",
+      "reads_value": 36000.0,
+      "reads_change": 0,
+      "reads_change_text": "",
+      "url": "https://fanqienovel.com/page/7690369406097951806",
+      "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/p2o41abccff48ea184e5f74af84da446f67~tplv-resize:225:0.image?lk3s=5b7047ff&x-expires=1795236347&x-signature=R3GPkxtNrLDu0WTeTXgx%2BiSk6cM%3D"
+    },
+    {
+      "title": "末世来的表小姐",
+      "author": "征世闲人",
+      "category": "古言脑洞",
+      "rank": 20,
+      "reads": "3.4万",
+      "reads_value": 34000.0,
+      "reads_change": 0,
+      "reads_change_text": "",
+      "url": "https://fanqienovel.com/page/7695717991668780057",
+      "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/p2o83c3d9ff5110b84d107f93bced8fa1a9~tplv-resize:225:0.image?lk3s=5b7047ff&x-expires=1795236323&x-signature=kR9U%2B2sq9GelTr66049WABrUOH0%3D"
+    },
+    {
+      "title": "假装失忆后，高冷师弟阴湿又变态",
+      "author": "玖玖嘉",
+      "category": "玄幻言情",
+      "rank": 20,
+      "reads": "3万",
+      "reads_value": 30000.0,
+      "reads_change": 0,
+      "reads_change_text": "",
+      "url": "https://fanqienovel.com/page/7684306818251623448",
+      "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/p2ofa69db45c0093f91c070ac09ec936122~tplv-resize:225:0.image?lk3s=5b7047ff&x-expires=1795236254&x-signature=WZUTx2%2F%2BZwNCgzmk2PQWK%2FDDkbg%3D"
+    },
+    {
+      "title": "HP：马尔福先生婚后不太矜持",
+      "author": "宣乘多",
+      "category": "女频衍生",
+      "rank": 19,
+      "reads": "2.9万",
+      "reads_value": 29000.0,
+      "reads_change": 0,
+      "reads_change_text": "",
+      "url": "https://fanqienovel.com/page/7701674825445542974",
+      "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/p2ob2291918ec008a22d17b7abb38ba245b~tplv-resize:225:0.image?lk3s=5b7047ff&x-expires=1795236242&x-signature=9%2F%2FBRinmOL2lSAECnsoZdsyfTcw%3D"
+    },
+    {
+      "title": "重回高三我断情戒爱只搞学习",
+      "author": "没有理想的嘤嘤",
+      "category": "青春甜宠",
+      "rank": 20,
+      "reads": "2.9万",
+      "reads_value": 29000.0,
+      "reads_change": 0,
+      "reads_change_text": "",
+      "url": "https://fanqienovel.com/page/7679754523266534425",
+      "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/p2ob8dcb1d9d36e4e25e6e29807e93ce89c~tplv-resize:225:0.image?lk3s=5b7047ff&x-expires=1795236347&x-signature=7T0jPXyihMzPlF%2Fyl7EzS0bKW8Y%3D"
+    },
+    {
+      "title": "案上乔",
+      "author": "行苇",
+      "category": "种田",
+      "rank": 16,
+      "reads": "2.1万",
+      "reads_value": 21000.0,
+      "reads_change": 0,
+      "reads_change_text": "",
+      "url": "https://fanqienovel.com/page/7660062221828901912",
+      "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/p2ob353e90aa6b993f82846d345b7c5c0ee~tplv-resize:225:0.image?lk3s=5b7047ff&x-expires=1795236265&x-signature=9vNHF3qAq0Tg8Ft14QcKJkw9Ilo%3D"
+    }
+  ],
+  "reads_growth_top": [
+    {
+      "title": "穿成强取豪夺哑巴男主的作精女友",
+      "author": "叶不鸿",
+      "category": "豪门总裁",
+      "rank": 4,
+      "reads": "28万",
+      "reads_value": 280000.0,
+      "reads_change": 57000.0,
+      "reads_change_text": "+5.7万",
+      "url": "https://fanqienovel.com/page/7678746037451770905",
+      "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/p2o936027128123608eddcc428442f67ad0~tplv-resize:225:0.image?lk3s=5b7047ff&x-expires=1795236390&x-signature=DFVFhp4AQDsWnuezXZkX8qdPfO8%3D"
+    },
+    {
+      "title": "王漫妮重生！这世她要做捞女",
+      "author": "豆米和安卿",
+      "category": "女频衍生",
+      "rank": 1,
+      "reads": "30万",
+      "reads_value": 300000.0,
+      "reads_change": 41000.0,
+      "reads_change_text": "+4.1万",
+      "url": "https://fanqienovel.com/page/7689406731931094078",
+      "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/p2o4093f25663b52db0233085ba21031b87~tplv-resize:225:0.image?lk3s=5b7047ff&x-expires=1795236239&x-signature=3KsDtS6hso3K3iLefg2%2BS5%2FwQOU%3D"
+    },
+    {
+      "title": "装纯，每晚都有人发狠想她",
+      "author": "碧优",
+      "category": "现言脑洞",
+      "rank": 1,
+      "reads": "36.1万",
+      "reads_value": 361000.0,
+      "reads_change": 30000.0,
+      "reads_change_text": "+3.0万",
+      "url": "https://fanqienovel.com/page/7694869945712135193",
+      "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/p2offb97cf1f733fce83c16ca8fb1933602~tplv-resize:225:0.image?lk3s=5b7047ff&x-expires=1795236285&x-signature=IkmhDuOOs60Vap4UsLfaKjUsX20%3D"
+    },
+    {
+      "title": "堂姐逼我换亲，带灵泉空间嫁猎户",
+      "author": "古州",
+      "category": "种田",
+      "rank": 1,
+      "reads": "10.2万",
+      "reads_value": 102000.0,
+      "reads_change": 29000.0,
+      "reads_change_text": "+2.9万",
+      "url": "https://fanqienovel.com/page/7680435303802211353",
+      "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/p2o68041ba6a05108202fe19208c4501134~tplv-resize:225:0.image?lk3s=5b7047ff&x-expires=1795236262&x-signature=SFzDSfafk%2FMzxoMLd5k3bLq%2Fhzk%3D"
+    },
+    {
+      "title": "重生把严厉daddy老公撩红瘟",
+      "author": "吉毛长娃娃",
+      "category": "豪门总裁",
+      "rank": 6,
+      "reads": "21万",
+      "reads_value": 210000.0,
+      "reads_change": 27000.0,
+      "reads_change_text": "+2.7万",
+      "url": "https://fanqienovel.com/page/7690944271750269976",
+      "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/p2o4d14225d518699d4527b9cb51068f94d~tplv-resize:225:0.image?lk3s=5b7047ff&x-expires=1795236390&x-signature=zKQa4CTyuEP%2F9HmLcl2MpKrx%2FNk%3D"
+    },
+    {
+      "title": "三天后重生，卖家产囤货抢回空间",
+      "author": "爱吃猫的西瓜",
+      "category": "年代",
+      "rank": 1,
+      "reads": "20.6万",
+      "reads_value": 206000.0,
+      "reads_change": 23000.0,
+      "reads_change_text": "+2.3万",
+      "url": "https://fanqienovel.com/page/7696792972272094270",
+      "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/p2o4c9e09bdf558d9dd59724ae297c3e884~tplv-resize:225:0.image?lk3s=5b7047ff&x-expires=1795236273&x-signature=jleZqV3bjNIhrOb053GceUxR6dE%3D"
+    },
+    {
+      "title": "九千岁不早朝，只想夜夜与卿欢",
+      "author": "尹山水",
+      "category": "宫斗宅斗",
+      "rank": 2,
+      "reads": "15.4万",
+      "reads_value": 154000.0,
+      "reads_change": 18000.0,
+      "reads_change_text": "+1.8万",
+      "url": "https://fanqienovel.com/page/7695333917204696126",
+      "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/p2ob961b9ffdf26e5f2d73b2c407b10a479~tplv-resize:225:0.image?lk3s=5b7047ff&x-expires=1795236297&x-signature=2El0MJZxfyLJC%2BlPg%2BxAltpTBhM%3D"
+    },
+    {
+      "title": "穿成绝色美人，我靠福袋随遇而安",
+      "author": "影子乘风",
+      "category": "快穿",
+      "rank": 8,
+      "reads": "8.7万",
+      "reads_value": 87000.0,
+      "reads_change": 17000.0,
+      "reads_change_text": "+1.7万",
+      "url": "https://fanqienovel.com/page/7698331141987650622",
+      "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/p2o2411733abd31d56a0b7c153e21881a16~tplv-resize:225:0.image?lk3s=5b7047ff&x-expires=1795236331&x-signature=Br8vpcqS0bIN10xg5CvcDMXWcAo%3D"
+    },
+    {
+      "title": "七零不下乡，我带着空间闪婚暴富",
+      "author": "琼花入梦",
+      "category": "年代",
+      "rank": 4,
+      "reads": "14.8万",
+      "reads_value": 148000.0,
+      "reads_change": 15000.0,
+      "reads_change_text": "+1.5万",
+      "url": "https://fanqienovel.com/page/7693996003094973464",
+      "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/p2o4c97b64fa9f2cd2369e591bf93226737~tplv-resize:225:0.image?lk3s=5b7047ff&x-expires=1795236273&x-signature=Spy%2FZ7elMdGPWsepJiF2LSHSUjs%3D"
+    },
+    {
+      "title": "恶役女配她只想活命",
+      "author": "暴躁123",
+      "category": "玄幻言情",
+      "rank": 1,
+      "reads": "49.3万",
+      "reads_value": 493000.0,
+      "reads_change": 14000.0,
+      "reads_change_text": "+1.4万",
+      "url": "https://fanqienovel.com/page/7654607579082935321",
+      "cover": "https://p3-reading-sign.fqnovelpic.com/novel-pic/p2o8cca0ce683c5f2d5e97504291bb4a9d0~tplv-resize:225:0.image?lk3s=5b7047ff&x-expires=1795236250&x-signature=3lTdL2QwMfrwoxbPfRUIAYULa%2FQ%3D"
+    }
+  ],
+  "theme_shift": {
+    "window_days": 7,
+    "up": [
+      {
+        "name": "双洁",
+        "count": 18,
+        "prev_count": 13,
+        "change": 5
+      },
+      {
+        "name": "末世",
+        "count": 15,
+        "prev_count": 10,
+        "change": 5
+      },
+      {
+        "name": "先婚后爱",
+        "count": 6,
+        "prev_count": 1,
+        "change": 5
+      },
+      {
+        "name": "和离",
+        "count": 5,
+        "prev_count": 1,
+        "change": 4
+      },
+      {
+        "name": "空间",
+        "count": 17,
+        "prev_count": 14,
+        "change": 3
+      },
+      {
+        "name": "穿书",
+        "count": 14,
+        "prev_count": 11,
+        "change": 3
+      },
+      {
+        "name": "青梅竹马",
+        "count": 5,
+        "prev_count": 2,
+        "change": 3
+      },
+      {
+        "name": "囤货",
+        "count": 4,
+        "prev_count": 1,
+        "change": 3
+      }
+    ],
+    "down": [
+      {
+        "name": "炮灰",
+        "count": 8,
+        "prev_count": 14,
+        "change": -6
+      },
+      {
+        "name": "反派",
+        "count": 6,
+        "prev_count": 11,
+        "change": -5
+      },
+      {
+        "name": "七零",
+        "count": 1,
+        "prev_count": 5,
+        "change": -4
+      },
+      {
+        "name": "民国",
+        "count": 3,
+        "prev_count": 6,
+        "change": -3
+      },
+      {
+        "name": "逃荒",
+        "count": 0,
+        "prev_count": 3,
+        "change": -3
+      },
+      {
+        "name": "团宠",
+        "count": 8,
+        "prev_count": 10,
+        "change": -2
+      },
+      {
+        "name": "甜宠",
+        "count": 5,
+        "prev_count": 7,
+        "change": -2
+      },
+      {
+        "name": "校园",
+        "count": 4,
+        "prev_count": 6,
+        "change": -2
+      }
+    ]
+  },
+  "category_board": [
+    {
+      "name": "古风世情",
+      "new_count": 0,
+      "dropped_count": 0,
+      "reads_growth_total": 7000.0,
+      "top_riser": {
+        "title": "陆大人是童养夫",
+        "change": "+3"
+      }
+    },
+    {
+      "name": "科幻末世",
+      "new_count": 0,
+      "dropped_count": 0,
+      "reads_growth_total": 16000.0,
+      "top_riser": {
+        "title": "公路求生，我靠盗笔主角杀疯了",
+        "change": "+3"
+      }
+    },
+    {
+      "name": "游戏体育",
+      "new_count": 2,
+      "dropped_count": 2,
+      "reads_growth_total": 3062.0,
+      "top_riser": {
+        "title": "泪失禁的漂亮妹宝网恋撞车了",
+        "change": "+6"
+      }
+    },
+    {
+      "name": "女频衍生",
+      "new_count": 1,
+      "dropped_count": 1,
+      "reads_growth_total": 48000.0,
+      "top_riser": {
+        "title": "综影视之从灵魂摆渡开始",
+        "change": "+1"
+      }
+    },
+    {
+      "name": "玄幻言情",
+      "new_count": 1,
+      "dropped_count": 1,
+      "reads_growth_total": 32000.0,
+      "top_riser": {
+        "title": "怎么？恶毒女配和反派不能亲吗？",
+        "change": "+4"
+      }
+    },
+    {
+      "name": "种田",
+      "new_count": 1,
+      "dropped_count": 1,
+      "reads_growth_total": 33000.0,
+      "top_riser": {
+        "title": "堂姐逼我换亲，带灵泉空间嫁猎户",
+        "change": "+1"
+      }
+    },
+    {
+      "name": "年代",
+      "new_count": 1,
+      "dropped_count": 1,
+      "reads_growth_total": 69000.0,
+      "top_riser": {
+        "title": "穿越年代对照组：被反派掐脖亲",
+        "change": "+4"
+      }
+    },
+    {
+      "name": "现言脑洞",
+      "new_count": 1,
+      "dropped_count": 1,
+      "reads_growth_total": 79000.0,
+      "top_riser": {
+        "title": "老实人穿书炮灰，被全员疯批盯上",
+        "change": "+3"
+      }
+    },
+    {
+      "name": "宫斗宅斗",
+      "new_count": 1,
+      "dropped_count": 1,
+      "reads_growth_total": 12000.0,
+      "top_riser": {
+        "title": "误闯天家，这王妃她不当了",
+        "change": "+4"
+      }
+    },
+    {
+      "name": "悬疑脑洞",
+      "new_count": 1,
+      "dropped_count": 1,
+      "reads_growth_total": -16000.0,
+      "top_riser": {
+        "title": "盗笔：我的植物没有成精",
+        "change": "+3"
+      }
+    },
+    {
+      "name": "古言脑洞",
+      "new_count": 1,
+      "dropped_count": 1,
+      "reads_growth_total": 19000.0,
+      "top_riser": {
+        "title": "穿越古代：躺平吃瓜养崽崽",
+        "change": "+3"
+      }
+    },
+    {
+      "name": "快穿",
+      "new_count": 0,
+      "dropped_count": 0,
+      "reads_growth_total": 39000.0,
+      "top_riser": {
+        "title": "快穿：我女配亿点好孕怎么啦",
+        "change": "+7"
+      }
+    },
+    {
+      "name": "青春甜宠",
+      "new_count": 2,
+      "dropped_count": 2,
+      "reads_growth_total": 4000.0,
+      "top_riser": {
+        "title": "她身边的人都不太正常",
+        "change": "+2"
+      }
+    },
+    {
+      "name": "星光璀璨",
+      "new_count": 1,
+      "dropped_count": 1,
+      "reads_growth_total": -1000.0,
+      "top_riser": {
+        "title": "官宣了！我和顶流挚友是双向暗恋",
+        "change": "+2"
+      }
+    },
+    {
+      "name": "女频悬疑",
+      "new_count": 2,
+      "dropped_count": 2,
+      "reads_growth_total": 5893.0,
+      "top_riser": {
+        "title": "她与枪同行",
+        "change": "+2"
+      }
+    },
+    {
+      "name": "职场婚恋",
+      "new_count": 0,
+      "dropped_count": 0,
+      "reads_growth_total": 4000.0,
+      "top_riser": {
+        "title": "娇弱女兵？她是特战天花板",
+        "change": "+3"
+      }
+    },
+    {
+      "name": "豪门总裁",
+      "new_count": 1,
+      "dropped_count": 1,
+      "reads_growth_total": 71000.0,
+      "top_riser": {
+        "title": "逃避强制爱的正确方式",
+        "change": "+2"
+      }
+    },
+    {
+      "name": "民国言情",
+      "new_count": 0,
+      "dropped_count": 0,
+      "reads_growth_total": 6500.0,
+      "top_riser": {
+        "title": "今古传奇之转房，",
+        "change": "+2"
+      }
+    }
+  ]
+}

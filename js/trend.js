@@ -31,6 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
         risers: document.getElementById('risers-list'),
         reads: document.getElementById('reads-list'),
         summaries: document.getElementById('summary-feed'),
+        typeChart: document.getElementById('hot-type-chart'),
+        themeChart: document.getElementById('hot-theme-chart'),
+        categoryChart: document.getElementById('category-compare-chart'),
     };
 
     init();
@@ -143,7 +146,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         subtitle.textContent = `${selectedCategory} · ${rows[0].date} 至 ${rows[rows.length - 1].date} · ${rows.length} 个观察日`;
 
-        renderMarketBoard(getWindowRows());
+        const rowsWindow = getWindowRows();
+        renderMarketBoard(rowsWindow);
+        renderTrendCharts(rowsWindow);
         renderList(els.reads, collectReads(rows));
         renderList(els.newBooks, collectNewBooks(rows));
         renderList(els.risers, collectRisers(rows));
@@ -438,9 +443,79 @@ document.addEventListener('DOMContentLoaded', () => {
         els.hotGenres.innerHTML = '<p class="muted-line">暂无数据。</p>';
         els.hotTypes.innerHTML = '<p class="muted-line">暂无数据。</p>';
         els.hotThemes.innerHTML = '<p class="muted-line">暂无数据。</p>';
-        [els.newBooks, els.risers, els.reads, els.summaries].forEach(el => {
-            el.innerHTML = '<p class="muted-line">暂无数据。</p>';
+        [els.newBooks, els.risers, els.reads, els.summaries,
+         els.typeChart, els.themeChart, els.categoryChart].forEach(el => {
+            if (el) el.innerHTML = '<p class="muted-line">暂无数据。</p>';
         });
+    }
+
+    function renderTrendCharts(rowsWindow) {
+        const hotTypes = collectHotTypes(rowsWindow);
+        const hotThemes = collectHotThemes(rowsWindow);
+        const categoryRows = collectCategoryCompare(rowsWindow);
+
+        renderSvgBars(els.typeChart, hotTypes.slice(0, 10).map(item => ({
+            label: item.name,
+            value: item.readGrowthTotal,
+            valueText: formatReads(item.readGrowthTotal),
+        })), '热门类型阅读增长');
+
+        renderSvgBars(els.themeChart, hotThemes.slice(0, 12).map(item => ({
+            label: item.name,
+            value: item.count,
+            valueText: String(item.count),
+        })), '高频题材出现次数');
+
+        renderSvgBars(els.categoryChart, categoryRows.map(item => ({
+            label: item.name,
+            value: item.readGrowthTotal,
+            valueText: `${formatReads(item.readGrowthTotal)} · 新上榜 ${item.newCount}`,
+        })), '窗口内各分类阅读增长');
+    }
+
+    function collectCategoryCompare(rowsWindow) {
+        return categories.map(name => {
+            const rows = rowsWindow
+                .map(row => ({ trend: row.trends[name] || null }))
+                .filter(row => row.trend);
+            const totals = summarizeRows(rows);
+            return {
+                name,
+                newCount: totals.newCount,
+                droppedCount: totals.droppedCount,
+                readGrowthTotal: totals.readGrowthTotal,
+            };
+        }).sort((a, b) => b.readGrowthTotal - a.readGrowthTotal || b.newCount - a.newCount);
+    }
+
+    function renderSvgBars(container, items, title) {
+        if (!container) return;
+        if (!items.length) {
+            container.innerHTML = '<p class="muted-line">暂无数据。</p>';
+            return;
+        }
+        const width = 720;
+        const rowH = 30;
+        const padL = 108;
+        const padR = 150;
+        const padT = 6;
+        const height = padT + items.length * rowH + 8;
+        const max = Math.max(...items.map(item => Math.abs(item.value)), 1);
+        const barMax = width - padL - padR;
+        const bars = items.map((item, index) => {
+            const y = padT + index * rowH;
+            const w = Math.max(3, Math.abs(item.value) / max * barMax);
+            return `
+                <text class="chart-bar-label" x="${padL - 10}" y="${y + 16}" text-anchor="end">${escapeHtml(item.label)}</text>
+                <rect class="chart-bar" x="${padL}" y="${y + 6}" width="${w.toFixed(1)}" height="14" rx="7"></rect>
+                <text class="chart-bar-value" x="${padL + w + 8}" y="${y + 16}">${escapeHtml(item.valueText)}</text>
+            `;
+        }).join('');
+        container.innerHTML = `
+            <svg class="trend-bar-chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeAttr(title)}">
+                ${bars}
+            </svg>
+        `;
     }
 
     function parseChange(value) {

@@ -78,6 +78,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const book = latest.book;
         const chartRecords = compactRecordsByDate(records).filter(item => item.readsValue > 0);
         const maxReads = Math.max(...records.map(item => item.readsValue || 0));
+        const previous = findPreviousRecord(records, latest);
+        const rankChange = previous ? previous.rank - latest.rank : null;
+        const readsChange = previous && latest.readsValue && previous.readsValue
+            ? latest.readsValue - previous.readsValue
+            : null;
+        const rankChangeLabel = rankChange === null
+            ? '—'
+            : (rankChange > 0 ? `↑+${rankChange}` : (rankChange < 0 ? `↓${Math.abs(rankChange)}` : '持平'));
+        const readsChangeLabel = readsChange === null ? '—' : formatReadsChange(readsChange);
 
         detail.innerHTML = `
             <section class="book-detail-hero">
@@ -92,6 +101,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span><strong>${escapeHtml(latest.readsLabel)}</strong><small>当前在读</small></span>
                         <span><strong>${escapeHtml(formatReads(maxReads))}</strong><small>近30日峰值</small></span>
                         <span><strong>${records.length}</strong><small>上榜记录</small></span>
+                        <span><strong>${escapeHtml(rankChangeLabel)}</strong><small>较上次名次</small></span>
+                        <span><strong>${escapeHtml(readsChangeLabel)}</strong><small>较上次在读</small></span>
                     </div>
                     <p class="detail-intro">${escapeHtml(book.intro || '暂无简介')}</p>
                     <div class="detail-actions">
@@ -325,10 +336,25 @@ document.addEventListener('DOMContentLoaded', () => {
         return raw.includes('万') ? num * 10000 : num;
     }
 
+    function findPreviousRecord(records, latest) {
+        const earlier = records.filter(item =>
+            item.date < latest.date && item.category === latest.category
+        );
+        return earlier.length ? earlier[earlier.length - 1] : null;
+    }
+
     function formatReads(value) {
         const num = Number(value || 0);
         if (num >= 10000) return `${(num / 10000).toFixed(1)}万`;
         return String(Math.round(num));
+    }
+
+    function formatReadsChange(diff) {
+        const value = Number(diff || 0);
+        if (!value) return '0';
+        const sign = value > 0 ? '+' : '';
+        if (Math.abs(value) >= 10000) return `${sign}${(value / 10000).toFixed(1)}万`;
+        return `${sign}${Math.round(value)}`;
     }
 
     function escapeHtml(str) {

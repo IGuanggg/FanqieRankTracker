@@ -1,2 +1,4 @@
 **/.DS_Store
 .DS_Store
+preview-*.png
+scripts/__pycache__/

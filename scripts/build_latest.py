@@ -43,6 +43,8 @@ def load_snapshot(path: str) -> dict:
 def compare_categories(today_cats: list, prev_cats: list) -> dict:
     """
     对比两天的分类数据，返回每个分类的趋势信息。
+    同时为今日书籍补充 rank / prev_rank / rank_change / is_new /
+    reads_value / reads_change / reads_change_text 字段，不删除原有字段。
     key = 分类名, value = trend dict
     """
     # 构建 prev 的索引: cat_name -> {url: (rank, reads_str, title)}
@@ -69,6 +71,8 @@ def compare_categories(today_cats: list, prev_cats: list) -> dict:
         risers = []
         fallers = []
         reads_growth = []
+        rank_changes = []
+        reads_growth_total = 0.0
 
         today_urls = set()
         for i, book in enumerate(today_books):
@@ -76,27 +80,48 @@ def compare_categories(today_cats: list, prev_cats: list) -> dict:
             today_urls.add(url)
             today_rank = i + 1
             title = book.get("title", "未知")
+            today_reads = parse_reads(book.get("reads", ""))
+
+            book["rank"] = today_rank
+            book["reads_value"] = today_reads
 
             if url in prev_urls:
                 prev_info = prev_urls[url]
                 prev_rank = prev_info["rank"]
                 rank_change = prev_rank - today_rank  # 正数=上升
 
+                book["prev_rank"] = prev_rank
+                book["rank_change"] = rank_change
+                book["is_new"] = False
+
+                if rank_change != 0:
+                    rank_changes.append({"title": title, "change": rank_change})
                 if rank_change > 0:
                     risers.append({"title": title, "change": f"+{rank_change}"})
                 elif rank_change < 0:
                     fallers.append({"title": title, "change": str(rank_change)})
 
-                # 阅读量变化
-                today_reads = parse_reads(book.get("reads", ""))
                 prev_reads = parse_reads(prev_info["reads"])
                 if today_reads > 0 and prev_reads > 0:
                     diff = today_reads - prev_reads
+                    book["reads_change"] = diff
+                    book["reads_change_text"] = (
+                        format_reads_change(diff) if diff != 0 else ""
+                    )
+                    reads_growth_total += diff
                     if diff != 0:
                         reads_growth.append(
                             {"title": title, "growth": format_reads_change(diff)}
                         )
+                else:
+                    book["reads_change"] = 0
+                    book["reads_change_text"] = ""
             else:
+                book["prev_rank"] = None
+                book["rank_change"] = 0
+                book["is_new"] = True
+                book["reads_change"] = 0
+                book["reads_change_text"] = ""
                 new_books.append(title)
 
         # 掉出榜单的书（含简介以便 AI 分析题材）
@@ -113,6 +138,7 @@ def compare_categories(today_cats: list, prev_cats: list) -> dict:
         reads_growth.sort(
             key=lambda x: parse_reads(x["growth"].replace("+", "")), reverse=True
         )
+        rank_changes.sort(key=lambda x: x["change"], reverse=True)
 
         trends[cat_name] = {
             "new_count": len(new_books),
@@ -122,13 +148,16 @@ def compare_categories(today_cats: list, prev_cats: list) -> dict:
             "top_risers": risers[:3],
             "top_fallers": fallers[:3],
             "reads_growth": reads_growth[:3],
+            "reads_growth_total": reads_growth_total,
+            "rank_changes": rank_changes,
             "summary": "",  # AI 总结，由 generate_ai_summaries 填充
         }
 
     return trends
 
 
-def generate_trend_summary_text(cat_name: str, trend: dict) -> str:
+def generate_trend_summary_text(cat_name: str, trend: dict,
+                               books: list = None) -> str:
     """生成基于规则的简短趋势文本（作为 AI 总结不可用时的 fallback）。"""
     parts = []
     if trend["new_count"] > 0:
@@ -146,6 +175,21 @@ def generate_trend_summary_text(cat_name: str, trend: dict) -> str:
     if trend["reads_growth"]:
         g = trend["reads_growth"][0]
         parts.append(f"《{g['title']}》阅读量{g['growth']}")
+
+    horses = []
+    for book in books or []:
+        if book.get("is_new"):
+            continue
+        if (book.get("rank") or 0) > 5 and (book.get("reads_change") or 0) > 0:
+            horses.append(book)
+    horses.sort(key=lambda b: b.get("reads_change", 0), reverse=True)
+    if horses:
+        d = horses[0]
+        growth = d.get("reads_change_text") or format_reads_change(d.get("reads_change", 0))
+        parts.append(
+            f"黑马《{d.get('title', '未知')}》位列第{d.get('rank')}名，阅读量{growth}"
+        )
+
     if not parts:
         parts.append("榜单无明显变动")
     return "；".join(parts) + "。"
@@ -638,19 +682,233 @@ def collect_market_hot_themes(output: dict, rows_window: list,
     )
 
 
+def book_identity_key(book: dict) -> tuple:
+    """用作品页 ID 或 书名+作者 识别同一本书。"""
+    url = str(book.get("url") or "")
+    match = re.search(r"/page/(\d+)", url)
+    if match:
+        return ("id", match.group(1))
+    title = str(book.get("title") or "").strip()
+    author = str(book.get("author") or "").strip()
+    return ("ta", f"{title}|{author}")
+
+
+def enrich_books_baseline(categories: list):
+    """无对比快照时，仍为书籍补齐排名和阅读数字段。"""
+    for cat in categories:
+        for i, book in enumerate(cat.get("books", [])):
+            book.setdefault("rank", i + 1)
+            book.setdefault("prev_rank", None)
+            book.setdefault("rank_change", 0)
+            book.setdefault("is_new", False)
+            book.setdefault("reads_value", parse_reads(book.get("reads", "")))
+            book.setdefault("reads_change", 0)
+            book.setdefault("reads_change_text", "")
+
+
+def compute_days_on_list(snapshot_paths: list, latest_data: dict, cap: int = 30):
+    """扫描最近若干日快照，统计该书在同一分类中的在榜天数。"""
+    recent = snapshot_paths[-cap:] if cap else snapshot_paths
+    presence = {}
+    for path in recent:
+        try:
+            data = load_snapshot(path)
+        except Exception as e:
+            print(f"  ⚠️  跳过在榜天数统计文件 {path}: {e}")
+            continue
+        for cat in data.get("categories", []):
+            bucket = presence.setdefault(cat.get("name", ""), {})
+            seen = set()
+            for book in cat.get("books", []):
+                key = book_identity_key(book)
+                if key in seen:
+                    continue
+                seen.add(key)
+                bucket[key] = bucket.get(key, 0) + 1
+
+    for cat in latest_data.get("categories", []):
+        bucket = presence.get(cat.get("name", ""), {})
+        for book in cat.get("books", []):
+            book["days_on_list"] = bucket.get(book_identity_key(book), 1)
+
+
+def compute_theme_shift(output: dict, trend_rows: list, categories: list,
+                        window: int = 7) -> dict:
+    """对比当前窗口与上一窗口的新书题材频次，得到题材升降。"""
+    current_rows = trend_rows[-window:] if window else trend_rows
+    previous_rows = (
+        trend_rows[-2 * window:-window] if window else []
+    )
+    current = collect_market_hot_themes(output, current_rows, categories)
+    previous = collect_market_hot_themes(output, previous_rows, categories)
+    prev_map = {item["name"]: item["count"] for item in previous}
+    curr_map = {item["name"]: item["count"] for item in current}
+    up, down = [], []
+    for name in set(prev_map) | set(curr_map):
+        count = curr_map.get(name, 0)
+        prev_count = prev_map.get(name, 0)
+        change = count - prev_count
+        item = {
+            "name": name,
+            "count": count,
+            "prev_count": prev_count,
+            "change": change,
+        }
+        if change > 0:
+            up.append(item)
+        elif change < 0:
+            down.append(item)
+    up.sort(key=lambda x: (x["change"], x["count"]), reverse=True)
+    down.sort(key=lambda x: (x["change"], -x["count"]))
+    return {
+        "window_days": window,
+        "up": up[:8],
+        "down": down[:8],
+    }
+
+
+def build_insights(output: dict, trend_rows: list = None) -> dict:
+    """生成首页总览所需的跨分类洞察。"""
+    categories = output.get("categories", [])
+    cat_names = [cat.get("name", "") for cat in categories]
+    book_count = 0
+    new_count = 0
+    dropped_count = 0
+    reads_growth_total = 0.0
+    top_growth_book = None
+    hottest_category = None
+    dark_horses = []
+    new_entries = []
+    growth_books = []
+    category_board = []
+
+    for cat in categories:
+        name = cat.get("name", "")
+        trend = cat.get("trend") or {}
+        books = cat.get("books") or []
+        book_count += len(books)
+        new_count += int(trend.get("new_count", 0) or 0)
+        dropped_count += int(trend.get("dropped_count", 0) or 0)
+
+        cat_growth = sum(float(book.get("reads_change") or 0) for book in books)
+        if not cat_growth:
+            cat_growth = float(trend.get("reads_growth_total") or 0)
+        reads_growth_total += cat_growth
+
+        risers = trend.get("top_risers") or []
+        category_board.append({
+            "name": name,
+            "new_count": int(trend.get("new_count", 0) or 0),
+            "dropped_count": int(trend.get("dropped_count", 0) or 0),
+            "reads_growth_total": cat_growth,
+            "top_riser": risers[0] if risers else None,
+        })
+        if hottest_category is None or cat_growth > hottest_category["reads_growth_total"]:
+            hottest_category = {
+                "name": name,
+                "reads_growth_total": cat_growth,
+            }
+
+        for book in books:
+            payload = {
+                "title": book.get("title", "未知"),
+                "author": book.get("author", ""),
+                "category": name,
+                "rank": book.get("rank"),
+                "reads": book.get("reads", "未知"),
+                "reads_value": book.get("reads_value", 0),
+                "reads_change": book.get("reads_change", 0),
+                "reads_change_text": book.get("reads_change_text", ""),
+                "url": book.get("url", ""),
+                "cover": book.get("cover", ""),
+            }
+            if (book.get("reads_change") or 0) != 0:
+                growth_books.append(payload)
+                if (
+                    top_growth_book is None
+                    or payload["reads_change"] > top_growth_book["reads_change"]
+                ):
+                    top_growth_book = payload
+            if (
+                not book.get("is_new")
+                and (book.get("rank") or 0) > 5
+                and (book.get("reads_change") or 0) > 0
+            ):
+                dark_horses.append(payload)
+            if book.get("is_new"):
+                new_entries.append(payload)
+
+    dark_horses.sort(key=lambda x: x.get("reads_change", 0), reverse=True)
+    new_entries.sort(key=lambda x: x.get("reads_value", 0) or 0, reverse=True)
+    growth_books.sort(key=lambda x: x.get("reads_change", 0), reverse=True)
+
+    theme_shift = {"window_days": 7, "up": [], "down": []}
+    if trend_rows:
+        theme_shift = compute_theme_shift(output, trend_rows, cat_names)
+
+    top_growth_out = None
+    if top_growth_book:
+        top_growth_out = {
+            "title": top_growth_book["title"],
+            "category": top_growth_book["category"],
+            "growth_text": top_growth_book.get("reads_change_text") or format_reads_change(
+                top_growth_book.get("reads_change", 0)
+            ),
+            "reads_change": top_growth_book.get("reads_change", 0),
+        }
+
+    return {
+        "date": output.get("date", ""),
+        "prev_date": output.get("prev_date", ""),
+        "kpis": {
+            "book_count": book_count,
+            "new_count": new_count,
+            "dropped_count": dropped_count,
+            "reads_growth_total": reads_growth_total,
+            "top_growth_book": top_growth_out,
+            "hottest_category": hottest_category,
+        },
+        "dark_horses": dark_horses[:8],
+        "new_entries": new_entries[:10],
+        "reads_growth_top": growth_books[:10],
+        "theme_shift": theme_shift,
+        "category_board": category_board,
+    }
+
+
 def build_rule_market_summary(period_label: str, hot_genres: list,
-                              hot_types: list, hot_themes: list) -> str:
+                              hot_types: list, hot_themes: list,
+                              dark_horses: list = None,
+                              theme_shift: dict = None,
+                              include_extra: bool = False) -> str:
     """基于统计结果生成全站热点兜底文案。"""
     top_genres = "、".join(item["name"] for item in hot_genres[:2])
     top_types = "、".join(item["name"] for item in hot_types[:3])
     top_themes = "、".join(item["name"] for item in hot_themes[:6])
     if not top_genres and not top_types:
         return f"{period_label}暂无足够数据判断全站热点。"
-    return (
+    text = (
         f"{period_label}里，{top_genres or top_types} 的阅读增长更强，"
         f"具体分类以 {top_types} 的新增在读更集中；新书题材上 {top_themes} "
         f"更高频，说明读者仍偏好强设定、强情绪钩子和明确爽点。"
     )
+    if include_extra and theme_shift and theme_shift.get("up"):
+        up_text = "、".join(
+            f"{item['name']}(+{item['change']})"
+            for item in theme_shift["up"][:4]
+        )
+        text += f"相较前一窗口，{up_text} 题材热度上升。"
+    if include_extra and dark_horses:
+        horse = dark_horses[0]
+        growth = horse.get("reads_change_text") or format_reads_change(
+            horse.get("reads_change", 0)
+        )
+        text += (
+            f"黑马方面，《{horse.get('title', '未知')}》"
+            f"（{horse.get('category', '')}第{horse.get('rank', '?')}名）"
+            f"阅读增量{growth}最突出。"
+        )
+    return text
 
 
 def build_market_summary_payload(output: dict, trends_dir: str) -> dict:
@@ -665,8 +923,12 @@ def build_market_summary_payload(output: dict, trends_dir: str) -> dict:
         hot_types = collect_market_hot_types(categories, rows_window)
         hot_genres = collect_market_hot_genres(categories, hot_types)
         hot_themes = collect_market_hot_themes(output, rows_window, categories)
+        insights = output.get("insights") or {}
         fallback_summary = build_rule_market_summary(
-            period_label, hot_genres, hot_types, hot_themes
+            period_label, hot_genres, hot_types, hot_themes,
+            dark_horses=insights.get("dark_horses") or [],
+            theme_shift=insights.get("theme_shift") or {},
+            include_extra=(key == "7"),
         )
         periods[key] = {
             "period": period_label,
@@ -939,7 +1201,7 @@ def generate_ai_summaries(categories: list, trends: dict,
                     print(f"    ↩️  保留旧 AI 总结: {cat_name}")
                 else:
                     trends[cat_name]["summary"] = generate_trend_summary_text(
-                        cat_name, trend
+                        cat_name, trend, cat.get("books", [])
                     )
 
     return trends
@@ -1020,6 +1282,7 @@ def main():
         )
     else:
         print("仅有一天数据，无法生成趋势对比。")
+        enrich_books_baseline(latest_data["categories"])
         trends = {
             cat["name"]: {
                 "new_count": 0,
@@ -1029,6 +1292,8 @@ def main():
                 "top_risers": [],
                 "top_fallers": [],
                 "reads_growth": [],
+                "reads_growth_total": 0,
+                "rank_changes": [],
                 "summary": "首日数据，暂无趋势对比。",
             }
             for cat in latest_data["categories"]
@@ -1054,13 +1319,15 @@ def main():
     else:
         missing = [k for k, v in {"API_BASE_URL": api_base_url, "API_KEY": api_key, "API_MODEL": api_model}.items() if not v]
         print(f"\n未配置 AI 服务（缺少: {', '.join(missing)}），使用规则摘要替代。")
+        cat_by_name = {cat["name"]: cat for cat in latest_data["categories"]}
         for cat_name, trend in trends.items():
             # 保留已有 AI 总结
             old = existing_trends.get(cat_name, {}).get("summary", "")
             if old and not is_rule_summary(old):
                 trend["summary"] = old
             elif not trend.get("summary"):
-                trend["summary"] = generate_trend_summary_text(cat_name, trend)
+                books = cat_by_name.get(cat_name, {}).get("books", [])
+                trend["summary"] = generate_trend_summary_text(cat_name, trend, books)
 
     # 组装输出
     output = {
@@ -1078,11 +1345,31 @@ def main():
         }
         output["categories"].append(cat_output)
 
+    # 统计最近 30 日在榜天数（只写进 latest 视图，不回写历史快照）
+    compute_days_on_list(snapshots[:target_idx + 1], latest_data, cap=30)
+
+    # 先构建洞察，再写入 latest_ranks，便于首页一次拉取
+    trend_rows_for_insights = load_trend_rows(trends_dir)
+    # 今日趋势此时尚未落盘，把内存中的 trends 并入窗口计算题材升降
+    today_row = {
+        "date": latest_data["date"],
+        "prev_date": prev_date,
+        "trends": trends,
+    }
+    trend_rows_for_insights = [
+        row for row in trend_rows_for_insights if row.get("date") != latest_data["date"]
+    ] + [today_row]
+    output["insights"] = build_insights(output, trend_rows_for_insights)
+
     # 写入 latest_ranks.json
     out_path = os.path.join(data_dir, "latest_ranks.json")
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(output, f, ensure_ascii=False, indent=2)
     print(f"\n✅ 已生成: {out_path}")
+
+    insights_path = os.path.join(data_dir, "insights.json")
+    write_json(insights_path, output["insights"])
+    print(f"✅ 首页洞察: {insights_path}")
 
     # 生成静态 API 文件：api/lastest/all.json + api/lastest/<type>.json
     api_dir = build_lastest_api(output, base_dir)

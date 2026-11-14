@@ -15,7 +15,8 @@
                 <h1>类型风向标</h1>
                 <p id="trend-subtitle">加载中...</p>
             </div>
-            <div class="trend-controls">
+            <div class="trend-controls trend-topbar-actions">
+                <a class="github-link-btn" href="https://github.com/IGuanggg/FanqieRankTracker" target="_blank" rel="noopener noreferrer" aria-label="打开 GitHub 仓库">GitHub</a>
                 <div class="trend-range" id="trend-range">
                     <button class="range-btn active" data-days="7">7日</button>
                     <button class="range-btn" data-days="14">14日</button>
@@ -44,6 +45,24 @@
                 <article class="market-card">
                     <span class="panel-kicker">高频题材</span>
                     <div id="hot-theme-list" class="theme-cloud"></div>
+                </article>
+            </section>
+
+            <section class="trend-charts">
+                <article class="trend-chart-card">
+                    <span class="panel-kicker">分类阅读增长</span>
+                    <h2>热门类型对比</h2>
+                    <div id="hot-type-chart" class="bar-list"></div>
+                </article>
+                <article class="trend-chart-card">
+                    <span class="panel-kicker">题材频次</span>
+                    <h2>高频题材</h2>
+                    <div id="hot-theme-chart" class="bar-list"></div>
+                </article>
+                <article class="trend-chart-card trend-chart-wide">
+                    <span class="panel-kicker">分类对比</span>
+                    <h2>窗口内分类动能</h2>
+                    <div id="category-compare-chart" class="bar-list"></div>
                 </article>
             </section>
 
