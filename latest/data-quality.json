@@ -1,31 +1,31 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-15T15:30:05Z",
+  "generated_at": "2026-09-28T15:30:09Z",
   "expected_tags": 99,
   "seven_day": {
     "planned_window_days": 7.0,
-    "snapshot_count": 4851,
-    "successful_snapshots": 4851,
+    "snapshot_count": 4054,
+    "successful_snapshots": 4054,
     "failed_snapshots": 0,
     "success_ratio": 1.0,
-    "earliest_snapshot": "2026-09-08T15:33:48Z",
-    "latest_snapshot": "2026-09-15T09:26:38Z",
+    "earliest_snapshot": "2026-09-21T17:19:39Z",
+    "latest_snapshot": "2026-09-27T02:49:34Z",
     "window_complete": true,
     "covered_tags": 99,
-    "unique_posts": 39,
-    "appearance_rows": 48510
+    "unique_posts": 41,
+    "appearance_rows": 40540
   },
   "thirty_day": {
     "planned_window_days": 30.0,
-    "snapshot_count": 19009,
-    "successful_snapshots": 19007,
-    "failed_snapshots": 2,
-    "success_ratio": 0.999895,
-    "earliest_snapshot": "2026-08-19T04:27:05Z",
-    "latest_snapshot": "2026-09-15T09:26:38Z",
-    "window_complete": false,
+    "snapshot_count": 19998,
+    "successful_snapshots": 19998,
+    "failed_snapshots": 0,
+    "success_ratio": 1.0,
+    "earliest_snapshot": "2026-08-29T15:52:55Z",
+    "latest_snapshot": "2026-09-27T02:49:34Z",
+    "window_complete": true,
     "covered_tags": 99,
-    "unique_posts": 218,
-    "appearance_rows": 188287
+    "unique_posts": 148,
+    "appearance_rows": 198099
   }
 }
